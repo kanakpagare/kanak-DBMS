@@ -1,0 +1,19 @@
+-- create
+CREATE TABLE student (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  First_name VARCHAR(50) NOT NULL,
+  Last_name VARCHAR(50) NOT NULL,
+  age INT,
+  course VARCHAR(100),
+  city VARCHAR(50)
+) ;
+INSERT INTO student (first_name , last_name , age , course , city) VALUES
+('Riya','Sharma', 20, 'BCA', 'Indore'),
+('Aman','Verma', 21,'B.Tech', 'Bhopal'),
+('Priya','Patel', 19, 'B.Com', 'Indore'),
+('Karan','singh', 22, 'MBA', 'Ujjain');
+ 
+SELECT
+First_name AS `first_name`,
+Last_name  AS `last_name`
+FROM student ; 
