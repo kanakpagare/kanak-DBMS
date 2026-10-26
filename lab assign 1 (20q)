@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS practice_db;
+USE practice_db;
+
+-- Purani tables hata do (child pehle, parent baad me)
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS jobs;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ------------------------------------------------------------
+-- Solution
+-- ------------------------------------------------------------
+-- Parent table (question me diya gaya)
+CREATE TABLE IF NOT EXISTS jobs (
+    JOB_ID     INTEGER NOT NULL UNIQUE PRIMARY KEY,
+    JOB_TITLE  VARCHAR(35) NOT NULL DEFAULT ' ',
+    MIN_SALARY DECIMAL(6,0) DEFAULT 8000,
+    MAX_SALARY DECIMAL(6,0) DEFAULT NULL
+) ENGINE = InnoDB;
+
+-- Child table
+CREATE TABLE employees (
+    employee_id INT NOT NULL,
+    first_name  VARCHAR(25),
+    last_name   VARCHAR(25),
+    job_id      INT,
+    salary      DECIMAL(8,2),
+    PRIMARY KEY (employee_id),
+    FOREIGN KEY (job_id) REFERENCES jobs (job_id)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+) ENGINE = InnoDB;
+
+-- ------------------------------------------------------------
+-- Structure check
+-- ------------------------------------------------------------
+DESCRIBE jobs;
+DESCRIBE employees;
+
+-- ------------------------------------------------------------
+-- Test (commented lines ko uncomment karke error dekh sakte ho)
+-- ------------------------------------------------------------
+INSERT INTO jobs (JOB_ID, JOB_TITLE) VALUES (1, 'Manager');
+INSERT INTO employees VALUES (101, 'Amit', 'Sharma', 1, 30000);
+
+-- DELETE FROM jobs WHERE JOB_ID = 1;            -- ERROR (NO ACTION)
+-- UPDATE jobs SET JOB_ID = 5 WHERE JOB_ID = 1;  -- ERROR (NO ACTION)
+SELECT * FROM employees;
