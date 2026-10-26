@@ -1,0 +1,33 @@
+-- ============================================================
+-- Question 9
+-- Write a SQL statement to create a table named countries including columns country_id, country_name and region_id and make sure that no duplicate data against column country_id will be allowed at the time of insertion.
+-- ============================================================
+
+CREATE DATABASE IF NOT EXISTS practice_db;
+USE practice_db;
+
+-- Purani tables hata do (child pehle, parent baad me)
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS countries;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ------------------------------------------------------------
+-- Solution
+-- ------------------------------------------------------------
+CREATE TABLE countries (
+    country_id   INT UNIQUE,
+    country_name VARCHAR(50),
+    region_id    INT
+);
+
+-- ------------------------------------------------------------
+-- Structure check
+-- ------------------------------------------------------------
+DESCRIBE countries;
+
+-- ------------------------------------------------------------
+-- Test (commented lines ko uncomment karke error dekh sakte ho)
+-- ------------------------------------------------------------
+INSERT INTO countries VALUES (1, 'India', 10);    -- OK
+-- INSERT INTO countries VALUES (1, 'China', 20); -- ERROR: duplicate country_id
+SELECT * FROM countries;
