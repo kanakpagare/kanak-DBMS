@@ -1,0 +1,37 @@
+mysql> use database laxmidbms;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use laxmidbms;
+Database changed
+mysql> CREATE TABLE countries (
+    ->     country_id INT,
+    ->     country_name VARCHAR(50) NULL,
+    ->     region_id INT
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int         | YES  |     | NULL    |       |
+| country_name | varchar(50) | YES  |     | NULL    |       |
+| region_id    | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> INSERT INTO countries
+    -> VALUES
+    -> (1, 'India', 1),
+    -> (2, NULL, 2),
+    -> (3, 'USA', NULL);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from countries;
++------------+--------------+-----------+
+| country_id | country_name | region_id |
++------------+--------------+-----------+
+|          1 | India        |         1 |
+|          2 | NULL         |         2 |
+|          3 | USA          |      NULL |
++------------+--------------+-----------+
