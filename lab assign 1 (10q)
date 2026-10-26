@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS practice_db;
+USE practice_db;
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS jobs;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ------------------------------------------------------------
+-- Solution
+-- ------------------------------------------------------------
+CREATE TABLE jobs (
+    job_id     INT,
+    job_title  VARCHAR(35)  DEFAULT ' ',     -- blank
+    min_salary DECIMAL(6,0) DEFAULT 8000,
+    max_salary DECIMAL(6,0) DEFAULT NULL
+);
+
+-- ------------------------------------------------------------
+-- Structure check
+-- ------------------------------------------------------------
+DESCRIBE jobs;
+
+-- ------------------------------------------------------------
+-- Test (commented lines ko uncomment karke error dekh sakte ho)
+-- ------------------------------------------------------------
+INSERT INTO jobs (job_id) VALUES (1);   -- baaki columns default value lenge
+SELECT * FROM jobs;
