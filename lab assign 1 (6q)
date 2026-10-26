@@ -1,0 +1,36 @@
+-- ============================================================
+-- Question 6
+-- Write a SQL statement to create a table named jobs including columns job_id, job_title, min_salary, max_salary and check whether the max_salary amount exceeding the upper limit 25000.
+-- ============================================================
+
+CREATE DATABASE IF NOT EXISTS practice_db;
+USE practice_db;
+
+-- Purani tables hata do (child pehle, parent baad me)
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS jobs;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ------------------------------------------------------------
+-- Solution
+-- ------------------------------------------------------------
+-- NOTE: CHECK constraint MySQL 8.0.16+ me enforce hota hai
+CREATE TABLE jobs (
+    job_id     VARCHAR(10) NOT NULL,
+    job_title  VARCHAR(35) NOT NULL,
+    min_salary DECIMAL(6,0),
+    max_salary DECIMAL(6,0),
+    CONSTRAINT chk_max_salary CHECK (max_salary <= 25000)
+);
+
+-- ------------------------------------------------------------
+-- Structure check
+-- ------------------------------------------------------------
+DESCRIBE jobs;
+
+-- ------------------------------------------------------------
+-- Test (commented lines ko uncomment karke error dekh sakte ho)
+-- ------------------------------------------------------------
+INSERT INTO jobs VALUES ('J1', 'Manager', 10000, 20000);    -- OK
+-- INSERT INTO jobs VALUES ('J2', 'CEO', 20000, 30000);     -- ERROR: 25000 se zyada
+SELECT * FROM jobs;
