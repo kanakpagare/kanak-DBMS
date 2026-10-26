@@ -1,0 +1,75 @@
+-- ============================================================
+-- Question 2
+-- Write a query to display the name (first_name, last_name) and department ID of all employees in departments 30 or 100 in ascending order.
+-- ============================================================
+
+-- ------------------------------------------------------------
+-- Setup (database + table + sample data)
+-- ------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS hr;
+USE hr;
+
+-- Practice ke liye employees table (standard hr structure) + sample data
+DROP TABLE IF EXISTS employees;
+CREATE TABLE employees (
+    employee_id    INT           NOT NULL,
+    first_name     VARCHAR(20),
+    last_name      VARCHAR(25)   NOT NULL,
+    email          VARCHAR(25)   NOT NULL,
+    phone_number   VARCHAR(20),
+    hire_date      DATE          NOT NULL,
+    job_id         VARCHAR(10)   NOT NULL,
+    salary         DECIMAL(8,2),
+    commission_pct DECIMAL(2,2),
+    manager_id     INT,
+    department_id  INT,
+    PRIMARY KEY (employee_id)
+) ENGINE = InnoDB;
+
+INSERT INTO employees VALUES
+(100, 'Steven',    'King',      'SKING',     '515.123.4567', '1987-06-17', 'AD_PRES',    24000.00, NULL, NULL, 90),
+(101, 'Neena',     'Kochhar',   'NKOCHHAR',  '515.123.4568', '1989-09-21', 'AD_VP',      17000.00, NULL, 100,  90),
+(102, 'Lex',       'De Haan',   'LDEHAAN',   '515.123.4569', '1993-01-13', 'AD_VP',      17000.00, NULL, 100,  90),
+(103, 'Alexander', 'Hunold',    'AHUNOLD',   '590.423.4567', '1990-01-03', 'IT_PROG',     9000.00, NULL, 102,  60),
+(104, 'Bruce',     'Ernst',     'BERNST',    '590.423.4568', '1991-05-21', 'IT_PROG',     6000.00, NULL, 103,  60),
+(105, 'David',     'Austin',    'DAUSTIN',   '590.423.4569', '1997-06-25', 'IT_PROG',     4800.00, NULL, 103,  60),
+(106, 'Valli',     'Pataballa', 'VPATABAL',  '590.423.4560', '1998-02-05', 'IT_PROG',     4500.00, NULL, 103,  60),
+(107, 'Diana',     'Lorentz',   'DLORENTZ',  '590.423.5567', '1999-02-07', 'IT_PROG',     4200.00, NULL, 103,  60),
+(108, 'Nancy',     'Greenberg', 'NGREENBE',  '515.124.4569', '1994-08-17', 'FI_MGR',     12008.00, NULL, 101, 100),
+(109, 'Daniel',    'Faviet',    'DFAVIET',   '515.124.4169', '1994-08-16', 'FI_ACCOUNT',  9000.00, NULL, 108, 100),
+(110, 'John',      'Chen',      'JCHEN',     '515.124.4269', '1997-09-28', 'FI_ACCOUNT',  8200.00, NULL, 108, 100),
+(111, 'Ismael',    'Sciarra',   'ISCIARRA',  '515.124.4369', '1997-09-30', 'FI_ACCOUNT',  7700.00, NULL, 108, 100),
+(112, 'Den',       'Raphaely',  'DRAPHEAL',  '515.127.4561', '1994-12-07', 'PU_MAN',     11000.00, NULL, 100,  30),
+(113, 'Alexander', 'Khoo',      'AKHOO',     '515.127.4562', '1995-05-18', 'PU_CLERK',    3100.00, NULL, 112,  30),
+(114, 'Shelli',    'Baida',     'SBAIDA',    '515.127.4563', '1997-12-24', 'PU_CLERK',    2900.00, NULL, 112,  30),
+(115, 'Sigal',     'Tobias',    'STOBIAS',   '515.127.4564', '1997-07-24', 'PU_CLERK',    2800.00, NULL, 112,  30),
+(116, 'Guy',       'Himuro',    'GHIMURO',   '515.127.4565', '1998-11-15', 'PU_CLERK',    2600.00, NULL, 112,  30),
+(117, 'Karen',     'Colmenares','KCOLMENA',  '515.127.4566', '1999-08-10', 'PU_CLERK',    2500.00, NULL, 112,  30),
+(118, 'Matthew',   'Weiss',     'MWEISS',    '650.123.1234', '1996-07-18', 'ST_MAN',      8000.00, NULL, 100,  50),
+(119, 'Adam',      'Fripp',     'AFRIPP',    '650.123.2234', '1997-04-10', 'ST_MAN',      8200.00, NULL, 100,  50),
+(120, 'Julia',     'Nayer',     'JNAYER',    '650.124.1214', '1997-07-16', 'SH_CLERK',    3200.00, NULL, 118,  50),
+(121, 'Irene',     'Mikkilineni','IMIKKILI', '650.124.1224', '1998-09-28', 'SH_CLERK',    2700.00, NULL, 118,  50),
+(122, 'Winston',   'Taylor',    'WTAYLOR',   '650.507.9876', '1998-01-24', 'SH_CLERK',    3200.00, NULL, 120,  50),
+(123, 'Jean',      'Fleaur',    'JFLEAUR',   '650.507.9877', '1998-02-23', 'SH_CLERK',    3100.00, NULL, 120,  50),
+(124, 'Martha',    'Sullivan',  'MSULLIVA',  '650.507.9878', '1996-06-21', 'SH_CLERK',    2500.00, NULL, 120,  50),
+(125, 'Jennifer',  'Whalen',    'JWHALEN',   '515.123.4444', '1987-09-17', 'AD_ASST',     4400.00, NULL, 101,  10),
+(126, 'Michael',   'Hartstein', 'MHARTSTE',  '515.123.5555', '1996-02-17', 'MK_MAN',     13000.00, NULL, 100,  20),
+(127, 'Pat',       'Fay',       'PFAY',      '603.123.6666', '1997-08-17', 'MK_REP',      6000.00, NULL, 126,  20),
+(128, 'Susan',     'Mavris',    'SMAVRIS',   '515.123.7777', '1994-06-07', 'HR_REP',      6500.00, NULL, 101,  40),
+(129, 'Hermann',   'Baer',      'HBAER',     '515.123.8888', '1994-06-07', 'PR_REP',     10000.00, NULL, 101,  70),
+(130, 'Shelley',   'Higgins',   'SHIGGINS',  '515.123.8080', '1994-06-07', 'AC_MGR',     12008.00, NULL, 101, 110),
+(131, 'William',   'Gietz',     'WGIETZ',    '515.123.8181', '1994-06-07', 'AC_ACCOUNT',  8300.00, NULL, 130, 110),
+(132, 'Mary',      'Blake',     'MBLAKE',    '590.423.7001', '1995-03-03', 'IT_PROG',    10000.00, NULL, 103,  60),
+(133, 'Tom',       'Scott',     'TSCOTT',    '590.423.7002', '1996-04-04', 'IT_PROG',    15000.00, NULL, 103,  60),
+(134, 'Henry',     'Ford',      'HFORD',     '650.124.7003', '1992-05-05', 'SH_CLERK',    4500.00, NULL, 120,  50),
+(135, 'Rebecca',   'Lane',      'RLANE',     '650.124.7004', '1999-01-01', 'SH_CLERK',    3000.00, NULL, 120,  50);
+
+-- ------------------------------------------------------------
+-- Query
+-- ------------------------------------------------------------
+SELECT first_name,
+       last_name,
+       department_id
+FROM employees
+WHERE department_id IN (30, 100)
+ORDER BY department_id ASC;
